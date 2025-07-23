@@ -1,0 +1,105 @@
+Create — POST
+Read - GET
+Update - PUT
+Delete - DELETE
+
+
+Use q to clear records
+*Tip on clearing 5432 port to allow "docker compose up -d" running;
+i) netstat -ano | findstr :5432
+Find out which program is currently running on port 5432, take not of the last numbers as that is the PID.
+ii) tasklist | findstr ******
+iii) taskkill /PID ***** /F
+iv) Close and restart Docker Desktop and also do updates.
+
+(1-4 Database Setup to be done after system restart / shut off)
+
+1)
+"Hello World Spring Boot" as rest Endpoint in Application file.
+Run Application file to Initialize and connect to port 8080 for operations.
+HTTP Request "GET http://localhost:8080" being ran to output "Hello World Spring Boot"
+
+2)
+Run Controller file for initializing Get Mapping(Get Request / Read) Operations.
+HTTP request "GET http://localhost:8080/api/v1/worker" being ran to Show / Read Application details outside of any Database connection.
+
+3)
+Utilizing the Docker-Compose.yml file, start up docker desktop, ensure docker's engine is running and then
+open the terminal and run;
+
+i) "ls" to show the docker file present in the project folder.
+ii) "docker compose up -d" to boot and initialize the Applications connection to the applied Database specified in the Docker-Compose.yml file.
+iii) "docker compose ps" to show the details of the Database and Application connection.
+iv) "docker compose logs" to finalize Database booting and ready it for spring boot java operations.
+
+
+4)
+Creating Database "amigo" we open the terminal and run;
+
+i) "docker compose ps" with the intention of noting and copying the container name.
+ii) "docker exec -it *Copied Container name* bash" in order to connect to PostgreSQL's server as a basic root user.
+iii) "psql -U *POSTGRES_USER from docker-compose.yml file*" in order to connect as the entered postgres user.
+iv) "\l" to show all databases in the server.
+v) "create database *Table name specified in docker-compose.yml file*;" while connected as Postgres User.
+vi) Start Application and open terminal to run "\l", check for amigos table.
+vii) "\c *Table name specified in docker-compose.yml file*;" in order to be connected to the table and not solely the postgres user.
+viii) Through being connected to the table insert (post) operations could be performed and the API could be used to fetch data from the db operation.
+
+
+*DB VIEW IN TERMINAL*
+5) Having denoted the Entity annotation and well as the Id annotation in the model file(e.g worker, software-engineer), restart
+the Application file an check for the declaration of data types and the defined formation of the connected table in the terminal.
+
+i) While being connected to the created table for intended CRUD operations
+run \d *worker / software-engineer* to get a layout of the data types made and defined in the base worker file.
+
+
+*DB INSERTION THROUGH TERMINAL AND VIEW THROUGH GET REQUEST*
+6) If the 2nd Get (Read) Request in the HTTP request file is ran then an empty array is seen
+because the worker table is empty.
+i) As well as if "SELECT * from worker;" is ran an empty table is seen.
+ii) To insert we say "INSERT INTO worker (department, fullname, role) VALUES ('Java', 'Chisom Gbulie', 'Spring boot Operation Analyst');"
+ and "INSERT INTO worker (department, fullname, role) VALUES ('Java', 'Bishop Oyelende', 'Fineract Operation Specialist');"
+ Then "SELECT * from worker;" to see the full table
+
+
+*REPETITIVE POST REQUESTS*
+7) For POST Requests, after initializing Post Mapping Entry points and endpoints in the
+Controller and Service, we go to out request file and we type;
+
+POST http://localhost:8080/api/v1/worker
+Content-Type: application/json
+
+{
+  "department": "AWS",
+  "fullname": "Thomas Adeleke",
+  "role": "DevOps"
+}
+
+For performing a POST Request entering a JSON body which is the block of code above.
+The details in the block of code could be changed for continuous
+Post Requesting and Creating of records.
+
+
+*GET OPERATION WITH ID*
+8) For GET Operation by Id, we re-run the Application and then in the request File we type;
+
+###
+GET http://localhost:8080/api/v1/worker/1
+
+With "1" being the Id intended to be found.
+
+
+
+*DELETE OPERATION*
+9) In Requests.http file run the following: "DELETE http://localhost:8080/api/v1/worker/1"
+
+
+*PUT OPERATION*
+10) In Requests.http file run the following: "PUT http://localhost:8080/api/v1/worker/*id*?fullname=NewName&department=IT"
+Ex.
+PUT http://localhost:8080/api/v1/worker/3?fullname=Jane%20Smith&department=Engineering&role=Senior%20Developer
+&20 is used to signify spaces in between String Values
+
+
+
